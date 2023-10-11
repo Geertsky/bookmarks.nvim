@@ -1,10 +1,37 @@
-# bookmarks
-A bash/nvim shared bookmarks plugin
-Pretty much just to try and write a lua plugin.
+# bookmarks.nvim
+Bookmarks.nvim is repository just to tryout writing nvim plugins.
+The idea is to have one location where `bookmarks` are defined. This file is used to define keymaps in neovim to change directory to the `<path>` when `<leader><alias>` is typed. The same file is used for defining, optionally prefixed aliases in bash to change directory to `<path>`.
+The `bookmarks.nvim` nvim plugin is meant to be used in combination with the [bookmarks.bash](https://github.com/Geertsky/bookmarks.bash) script. 
+# Installation
+For Lazy.nvim add the following to your `init.lua`:
 
-It features a lua file returning a table of key valua pairs. In nvim the plugin goes trough this list to set keybinding, in /etc/profile.d/bookmarks.sh it goes through the same list defining aliasses with an optional prefix for tab completion.
+```
+{
+    'Geertsky/bookmarks.nvim',
+    opts = {
+      bookmarkspath = '/home/geert/.bookmarks.lua',
+    },
+    init = function()
+      require('bookmarks').setup()
+    end,
+  },
+```
 
+The option `bookmarkspath` points to the lua file containing the `<alias>=<path>` bookmarks table.
+
+## bookmarks.lua
+The `bookmarks.lua` returns a table of `<alias>=<path>` pairs. 
+A minimal example:
 The lua bookmarks file retuns a table of `<alias>=<path>` pairs.
+```
+return {
+  ce='/etc',
+  ch='/home',
+}
+```
 
-On the nvim side the bookmarks plugin contains a `setup(opts)` function. Where opts.bookmarkspath can be set to the full-path of the lua bookmarks file. It defaults to `~/.bookmarks.lua`. The plugin defines keymaps of `<leader><alias>` to `:cd <path>`.
-On the bash profile side the `bookmarks.sh` script goes through the same table of `<alias>=<path>` pairs an defines aliases for a cd to those `<path>`s with an optional prefix. (I prefer to prefix all my functions, aliases, binaries with "gg" in sake of tab-completion...)
+# Configuration
+In the `bookmarks.nvim` plugin knows one option:
+|option         |Description                                                        |
+|---------------|-------------------------------------------------------------------|
+|`bookmarkspath`|Points to the lua file containing the table with aliases for paths.|
